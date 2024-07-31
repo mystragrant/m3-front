@@ -37,6 +37,7 @@ import { useThemeProvider } from "../../../../providers/Theme/useThemeProvider";
 import { useTxQueue } from "../../../../providers/useTxQueue/useTxQueue";
 import { chainIdToName } from "../../../../utils/parser";
 import { trimHash } from "../../../../utils/utils";
+import { tokenStandardToNumber } from "../../../pages/marketplaceItem/ListingMenu/listingMenu";
 import { CustomModal } from "../../CustomModal/customModal";
 import { NETWORK, WalletSelector } from "../../WalletSelector/walletSelector";
 import { InputWrapper } from "../../containers/InputWrapper";
@@ -47,6 +48,7 @@ export const PlaceListingModal = ({
   image,
   tokenId,
   name,
+  standard,
   collection,
   network,
   onClose,
@@ -60,6 +62,7 @@ export const PlaceListingModal = ({
   name: string;
   network: any;
   collection: string;
+  standard: string;
   image: string;
   onClose: () => void;
   type: string;
@@ -95,10 +98,10 @@ export const PlaceListingModal = ({
         const hashBytes = Buffer.from(CASPER_MARKETPLACE_PACKAGE_HASH, "hex");
 
         const runtimeArgs = cepStandardToNumber(type) == 1 ? RuntimeArgs.fromMap({
-          operator: CLValueBuilder.key(CLValueBuilder.byteArray(hashBytes)),
+          operator: CLValueBuilder.key(CLValueBuilder.byteArray(hashBytes as any)),
           token_id: [CLValueBuilder.i64(tokenId)],
         } as any) : RuntimeArgs.fromMap({
-          spender: CLValueBuilder.key(CLValueBuilder.byteArray(hashBytes)),
+          spender: CLValueBuilder.key(CLValueBuilder.byteArray(hashBytes as any)),
           token_ids: CLValueBuilder.list([CLValueBuilder.u256(tokenId)]),
         } as any);
 
@@ -179,7 +182,7 @@ export const PlaceListingModal = ({
           token_id: CLValueBuilder.u256(Number(tokenId)),
           price: CLValueBuilder.u512(toMotes(price)),
           duration_minutes: CLValueBuilder.u64(durationInMinutes),
-          token_standard: CLValueBuilder.u8(0),
+          token_standard: CLValueBuilder.u8(tokenStandardToNumber(standard)),
         } as any);
 
         const deployParams = new DeployUtil.DeployParams(

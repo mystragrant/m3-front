@@ -112,6 +112,7 @@ export const NFTItem = ({
 
   const listingModal = useDisclosure();
 
+
   return (
     <Flex
       flexDir="column"
@@ -306,6 +307,7 @@ export const NFTItem = ({
             )}
             {listingModal.isOpen && data.name != "" && (
               <PlaceListingModal
+                standard={data.contract_type}
                 name={data.name}
                 type={data.contract_type}
                 address={data.contract_hash}

@@ -152,6 +152,7 @@ export const MarketplaceItemPage = () => {
     }
   };
 
+
   return item ? (
     <PageContainer>
       <Grid templateColumns="auto 1.4fr" gap="80px">

@@ -25,6 +25,19 @@ import { PlaceBidModal } from "./PlaceBidModal/placeBidModal";
 
 const Buffer = require("buffer/").Buffer;
 
+export function tokenStandardToNumber(standard: any) {
+  if(standard) {
+    if(standard.toLocaleLowerCase() == "cep47") {
+      return 0 
+    } else {
+      return 1
+    }
+  } else {
+    return 0
+  }
+ 
+}
+
 export const ListingMenu = ({
   price,
   address,
@@ -56,6 +69,8 @@ export const ListingMenu = ({
 
   const {isLogged } = useUserProvider()
 
+
+
   const cancelListing = async () => {
     let pubKey = " ";
     setLoading(true)
@@ -69,7 +84,7 @@ export const ListingMenu = ({
         const runtimeArgs = RuntimeArgs.fromMap({
           contract_hash: CLValueBuilder.string("contract-" + address),
           token_id: CLValueBuilder.u256(Number(tokenId)),
-          token_standard: CLValueBuilder.u8(0),
+          token_standard: CLValueBuilder.u8(tokenStandardToNumber(tokenStandard)),
         } as any);
 
         const deployParams = new DeployUtil.DeployParams(
